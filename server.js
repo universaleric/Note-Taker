@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const db = require("./db/db.json");
+const fs = require('fs');
 
 // Sets up the Express App
 
@@ -30,8 +31,18 @@ app.post('/api/notes', (req, res) => {
     }
 
     db.push(newNote);
+    console.log(db);
+
+    WriteToFile();
     res.json(db);
 })
+
+function WriteToFile() {
+    const fileName = "./db/db.json";
+    let fileStr = JSON.stringify(db);
+    fs.writeFile(fileName, fileStr, (err) =>
+    err ? console.log(err) : console.log("Updating db.json..."));
+}
 
 
 
