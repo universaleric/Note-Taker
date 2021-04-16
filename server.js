@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const db = require("./db/db.json");
 const fs = require('fs');
+let uniqid = require('uniqid');
 
 // Sets up the Express App
 
@@ -23,9 +24,9 @@ app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '/public/index.htm
 
 app.post('/api/notes', (req, res) => {
     const newNotes = req.body;
-
+    let newID = uniqid();
     let newNote = {
-        id: "24",
+        id: newID,
         title: newNotes.title,
         text: newNotes.text
     }
@@ -36,6 +37,16 @@ app.post('/api/notes', (req, res) => {
     WriteToFile();
     res.json(db);
 })
+
+app.delete('/api/notes/:id', (req, res) => {
+    let idToDelete = req.params.id;
+
+    console.log(idToDelete);
+    db = db.filter(note => note.id != idToDelete);
+
+    WriteToFile();
+    res.json(db);
+});
 
 function WriteToFile() {
     const fileName = "./db/db.json";
