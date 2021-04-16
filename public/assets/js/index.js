@@ -33,6 +33,16 @@ const getNotes = () =>
     },
   });
 
+  fetch('/api/notes', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(response => response.json())
+  .then(noteList => console.log(noteList))
+
+
 const saveNote = (note) =>
   fetch('/api/notes', {
     method: 'POST',
@@ -114,9 +124,11 @@ const handleRenderSaveBtn = () => {
   }
 };
 
+
 // Render the list of note titles
-const renderNoteList = async (notes) => {
-  let jsonNotes = await notes.json();
+const renderNoteList = async (response) => {
+  let jsonNotes = await response.json();
+  console.log(jsonNotes);
   if (window.location.pathname === '/notes') {
     noteList.forEach((el) => (el.innerHTML = ''));
   }
